@@ -12,9 +12,9 @@ void Menu()
     cout << "Welcome To The Weather App!\n" << endl;
     cout<<"1. Display Data" << endl;
     cout<<"2. Load Data" << endl;
-    cout<<"3. Add Data" << endl;
+    cout<<"3. Modify Data" << endl;
     cout<<"4. Search Date"<< endl;
-    cout<<"5. Modify Data" << endl;
+    cout<<"5. Add Data" << endl;
     cout<<"6. Exit" << endl;
 
     cin >> selection;
@@ -23,6 +23,22 @@ void Menu()
     if (selection == 1)
     {
         DisplayData();
+    }
+    if (selection == 2)
+    {
+        LoadData();
+    }
+    if (selection == 3)
+    {
+        ModifyData();
+    }
+    if (selection == 4)
+    {
+        SearchData();
+    }
+    if (selection == 5)
+    {
+        AddData();
     }
     if(selection == 6)
     {

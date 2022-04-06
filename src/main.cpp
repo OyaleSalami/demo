@@ -3,46 +3,56 @@
 #include "Utility.h"
 using namespace std;
 
+
+static vector<DailyData> dataList;
+static vector<DailyData> temp;
+
 void Menu()
 {
     system("CLS");
     int selection = 0;
 
     cout<< "Welcome To The Weather App!\n" << endl;
-    cout<<"1. Display Data" << endl;
-    cout<<"2. Load Data" << endl;
-    cout<<"3. Modify Data" << endl;
-    cout<<"4. Search Date"<< endl;
-    cout<<"5. Add Data" << endl;
-    cout<<"6. Exit" << endl;
+    cout<<"1. Display All Data" << endl;
+    cout<<"2. Display Data From File" << endl;
+    cout<<"3. Load Data" << endl;
+    cout<<"4. Search Data" << endl;
+    cout<<"5. Clear Loaded Data"<< endl;
+    cout<<"7. Exit" << endl;
 
     cin >> selection;
     cin.ignore();
 
     if (selection == 1)
     {
-        DisplayData("");
+        DisplayAllData(dataList);
     }
-    if (selection == 2)
+    else if (selection == 2)
     {
-        LoadData();
+        DisplayDataFromFile();
     }
-    if (selection == 3)
+    else if (selection == 3)
     {
-        ModifyData();
+        LoadData(dataList);
     }
-    if (selection == 4)
+    else if (selection == 4)
     {
-        SearchData();
+        SearchData(dataList, temp);
     }
-    if (selection == 5)
+    else if (selection == 5)
+    {
+        ClearData(dataList, temp);
+    }
+    else if (selection == 6)
     {
         AddData();
     }
-    if(selection == 6)
+    else if(selection == 7)
     {
         return;
     }
+
+    system("pause");
     Menu();
 }
 
@@ -58,8 +68,7 @@ int main()
 {
     cout << "Welcome To The Weather App!" << endl;
 
-    DailyData dat("2022 11 09 89 32 0.0 0.0 7.8");
-    dat.Summary();
+    Menu();
 
     system("Pause");
     exit();

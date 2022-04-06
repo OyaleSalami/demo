@@ -25,23 +25,30 @@ public:
        stringstream ss(line);
        string s_year, s_month, s_day, s_maxTemp, s_minTemp, s_meltedRain, s_snowPellets, s_snowPelletsOnGround;
 
-       getline(ss, s_year, ' ');
-       getline(ss, s_month, ' ');
-       getline(ss, s_day, ' ');
-       getline(ss, s_maxTemp, ' ');
-       getline(ss, s_minTemp, ' ');
-       getline(ss, s_meltedRain, ' ');
-       getline(ss, s_snowPellets, ' ');
-       getline(ss, s_snowPelletsOnGround, ' ');
+       try
+       {
+           getline(ss, s_year, ' ');
+           getline(ss, s_month, ' ');
+           getline(ss, s_day, ' ');
+           getline(ss, s_maxTemp, ' ');
+           getline(ss, s_minTemp, ' ');
+           getline(ss, s_meltedRain, ' ');
+           getline(ss, s_snowPellets, ' ');
+           getline(ss, s_snowPelletsOnGround, ' ');
 
-       year = stoi(s_year);
-       month = stoi(s_month);
-       day = stoi(s_day);
-       maxTemp = stof(s_maxTemp);
-       minTemp = stof(s_minTemp);
-       meltedRain = stof(s_meltedRain);
-       snowPellets = stof(s_snowPellets);
-       snowPelletsOnGround = stof(s_snowPelletsOnGround);
+           year = stoi(s_year);
+           month = stoi(s_month);
+           day = stoi(s_day);
+           maxTemp = stof(s_maxTemp);
+           minTemp = stof(s_minTemp);
+           meltedRain = stof(s_meltedRain);
+           snowPellets = stof(s_snowPellets);
+           snowPelletsOnGround = stof(s_snowPelletsOnGround);
+       }
+       catch(...)
+       {
+            cout << "Error: File is damaged!" << endl;
+       }
     }
 
     void Summary()
@@ -53,12 +60,49 @@ public:
            <<"Snow/Ice Pellets/Hail(In): " << snowPellets <<endl
            <<"Snow/Ice Pellets/Hail On Ground(In): " <<snowPelletsOnGround<<endl;
     }
+
+    void print()
+    {
+        cout << day <<"/"<< month <<"/" << year << " "
+             << maxTemp << " " << minTemp << " " << meltedRain
+             << " " << snowPellets << " " << snowPelletsOnGround << endl;
+    }
 };
 
-static void DisplayData(string path)
+static void ClearData(vector<DailyData>& dataList, vector<DailyData>& temp)
 {
+    dataList.clear();
+    temp.clear();
+}
+
+static void DisplayAllData(vector<DailyData>& dataList)
+{
+    if (dataList.size() == 0)
+    {
+        cout << "Load Some Data First!!" << endl;
+        return;
+    }
+    for(int i = 0; i < dataList.size(); i++)
+    {
+        dataList[i].print();
+    }
+    system("pause");
+}
+
+static void DisplayDataFromFile()
+{
+    string path;
+    cout << "Enter the path to the file: ";
+    getline(cin, path);
+    if(path == "")
+    {
+        cout << "No path entered!" << endl;
+        return;
+    }
+
     ifstream data;
     data.open(path.c_str(), ios::in);
+
     string currLine;
     cout << "Displaying Data from " << path <<endl;
     int line = 0;
@@ -69,7 +113,7 @@ static void DisplayData(string path)
     }
 }
 
-static void LoadData()
+static void LoadData(vector<DailyData>& dataList)
 {
     string path;
     cout << "Enter The Path To The File: ";
@@ -77,39 +121,128 @@ static void LoadData()
 
     ifstream data;
     data.open(path.c_str(), ios::in);
+    cout << "\nReading Data From " << path <<endl;
 
     string currLine;
-    cout << "Reading Data From " << path <<endl;
-
     while(getline(data, currLine))
     {
-        //Fill in data here
+        dataList.push_back(DailyData(currLine));
     }
 
     cout << "Done Loading Data From " << path << endl;
     system("pause");
-
-    ifstream exit;
-    exit.open("data", ios::app);
-    getline(exit, path);
-    exit.close();
 }
 
-static void SearchData()
+static void SearchData(vector<DailyData>& dataList, vector<DailyData>& temp)
 {
-    string monthName;
-    string day;
+    int selection;
 
-    cout << "Enter The Name Of The Month: ";
-    cin >> monthName;
-    //search for month
+    cout << "1. Search By Date" << endl
+         << "2. Search By Day" << endl
+         << "3. Search By Month" << endl
+         << "4. Search By Year" << endl
+         << "5. Search By Rainfall" << endl;
+    cin >> selection;
+    cin.ignore();
 
-    cout  << "Enter The Name Of The Day: ";
-    cin >> day;
-    //search for the day
+    if(selection == 1)
+    {
+        //Searching by date
+        int day;
+        int month;
+        int year;
 
-    cout << "Searching ..." << endl;
+        cout << "\nEnter the day: ";
+        cin >> day;
+        cin.ignore();
+
+        cout << "\nEnter the month: ";
+        cin >> month;
+        cin.ignore();
+
+        cout << "\nEnter the year: ";
+        cin >> year;
+        cin.ignore();
+
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            if (dataList[i].day = day)
+                if (dataList[i].month = month)
+                    if (dataList[i].year = year)
+                        temp.push_back(dataList[i]);
+        }
+    }
+    else if(selection == 2)
+    {
+        int day;
+
+        cout << "\nEnter the day: ";
+        cin >> day;
+        cin.ignore();
+
+        //Searching by day
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            if (dataList[i].day = day)
+                temp.push_back(dataList[i]);
+        }
+    }
+    else if(selection == 3)
+    {
+        //Search by month
+        int month;
+
+        cout << "\nEnter the month: ";
+        cin >> month;
+        cin.ignore();
+
+        //Searching by day
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            if (dataList[i].month = month)
+                temp.push_back(dataList[i]);
+        }
+    }
+    else if(selection == 4)
+    {
+        //By year
+        int year;
+
+        cout << "\nEnter the year: ";
+        cin >> year;
+        cin.ignore();
+
+        //Searching by day
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            if (dataList[i].year = year)
+                temp.push_back(dataList[i]);
+        }
+
+    }
+    else if(selection == 5)
+    {
+        //TODO: Blank for now
+    }
+    else
+    {
+        cout << "Invalid Option" <<endl;
+        SearchData(dataList, temp);
+    }
+
+    if (temp.size() == 0)
+    {
+        cout << "No data has been found!" << endl;
+    }
+    else
+    {
+        for(int i = 0; i < dataList.size(); i++)
+        {
+            temp[i].print();
+        }
+    }
     system("pause");
+    temp.clear();
 }
 
 static void ModifyData()
